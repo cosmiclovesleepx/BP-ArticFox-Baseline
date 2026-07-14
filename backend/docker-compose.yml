@@ -1,0 +1,22 @@
+# Entorno SOLO de pruebas locales. No usar estas credenciales en producción.
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: polarops-db-test
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: polarops
+      POSTGRES_PASSWORD: polarops_dev_only
+      POSTGRES_DB: polarops
+    ports:
+      - "5432:5432"
+    volumes:
+      - polarops_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U polarops"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  polarops_pgdata:
